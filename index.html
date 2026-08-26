@@ -7,6 +7,7 @@
     <title>給与計算</title>
 </head>
 <body>
+    <p>日付:<input type="date" id="nichi"></p>
     <p>小学生コマ:<input type="number" id="syougaku" min = "0"></p>
     <p>中学生コマ:<input type="number" id="tyuugaku" min = "0"></p>
     <p>高校生コマ:<input type="number" id="koukou" min = "0"></p>
@@ -15,9 +16,13 @@
     <p>2人:<input type="number" id="ninzu" min = "0"></p>
     <p>3人:<input type="number" id="ninzu2" min = "0"></p>
     <button onclick="keisan()">計算</button>
+    <button onclick="hozon()">保存</button>
+    <button onclick="sakujo()">削除</button>
 <h2 id ="kekka"></h2>
+<ul id="list"></ul>
 
 <script>
+    let rireki = JSON.parse(localStorage.getItem("rireki")) || [];
 function keisan(){
     let syougaku = Number(document.getElementById("syougaku").value);
     let tyuugaku = Number(document.getElementById("tyuugaku").value);
@@ -29,6 +34,53 @@ function keisan(){
     let total = syougaku * 1800 + tyuugaku * 1920 + koukou * 2320 + ninzu * 50 + ninzu2 * 100 + kankyou * 288 + jimu * 1150
     document.getElementById("kekka").textContent = "給与合計:" + total + "円";
 }
+function hyouji(){
+let list = document.getElementById("list");
+let hyou = "<table border='1'><tr><th>選択</th><th>日付</th><th>小学生</th><th>中学生</th><th>高校生</th><th>2人</th><th>3人</th><th>環境整備</th><th>事務</th><th>合計</th></tr>";
+for (let i = 0; i < rireki.length; i++) {
+    let r = rireki[i];
+    hyou += "<tr><td><input type ='checkbox' name = 'sentaku' value='"+ i + "'></td><td>" + r.nichi + "</td><td>" + r.syougaku + "</td><td>" + r.tyuugaku + "</td><td>" + r.koukou + "</td><td>" + r.ninzu + "</td><td>" + r.ninzu2 + "</td><td>" + r.kankyou + "</td><td>" + r.jimu + "</td><td>" + r.total + "</td></tr>";
+        }
+
+hyou += "</table>";
+list.innerHTML = hyou;
+    }
+
+function hozon(){
+    let syougaku = Number(document.getElementById("syougaku").value);
+    let tyuugaku = Number(document.getElementById("tyuugaku").value);
+    let koukou = Number(document.getElementById("koukou").value);
+    let ninzu = Number(document.getElementById("ninzu").value);
+    let ninzu2 = Number(document.getElementById("ninzu2").value);
+    let kankyou = Number(document.getElementById("kankyou").value);
+    let jimu = Number(document.getElementById("jimu").value);
+    let nichi = document.getElementById("nichi").value;
+    let total = syougaku * 1800 + tyuugaku * 1920 + koukou * 2320 + ninzu * 50 + ninzu2 * 100 + kankyou * 288 + jimu * 1150
+    rireki.push({
+        nichi: nichi,
+        syougaku: syougaku,
+        tyuugaku: tyuugaku,
+        koukou: koukou,
+        ninzu: ninzu,
+        ninzu2: ninzu2,
+        kankyou: kankyou,
+        jimu: jimu,
+        total: total
+    });
+    localStorage.setItem("rireki", JSON.stringify(rireki));
+    hyouji();
+}
+
+function sakujo(){
+    let erabareta = document.querySelectorAll("input[name='sentaku']:checked");
+for (let i = erabareta.length - 1; i >=0; i--) {
+    rireki.splice(erabareta[i].value,1);
+    }
+    localStorage.setItem("rireki", JSON.stringify(rireki));
+    hyouji();
+}
+hyouji();
+
 </script>
 </body>
 </html>
