@@ -14,10 +14,11 @@
     <p>事務:<input type="number" id="jimu" min = "0"></p>
     <p>2人:<input type="number" id="ninzu" min = "0"></p>
     <p>3人:<input type="number" id="ninzu2" min = "0"></p>
-    <button id="calc">計算</button>
+    <button onclick="keisan()">計算</button>
 <h2 id ="kekka"></h2>
 
 <script>
+function keisan(){
     let syougaku = Number(document.getElementById("syougaku").value);
     let tyuugaku = Number(document.getElementById("tyuugaku").value);
     let koukou = Number(document.getElementById("koukou").value);
@@ -27,6 +28,7 @@
     let jimu = Number(document.getElementById("jimu").value);
     let total = syougaku * 1800 + tyuugaku * 1920 + koukou * 2320 + ninzu * 50 + ninzu2 * 100 + kankyou * 288 + jimu * 1150
     document.getElementById("kekka").textContent = "給与合計:" + total + "円";
+}
 </script>
 </body>
 </html>
